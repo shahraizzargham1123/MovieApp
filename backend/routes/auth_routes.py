@@ -48,7 +48,7 @@ def login():
 
     return jsonify({
         "message": "Login successful",
-        "user": {"id": user.id, "username": user.username, "email": user.email}
+        "user": {"id": user.id, "username": user.username, "email": user.email, "is_admin": user.is_admin}
     })
 
 @auth_bp.route("/logout", methods=["POST"])

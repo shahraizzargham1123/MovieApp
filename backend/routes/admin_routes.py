@@ -21,7 +21,7 @@ def get_all_users():
     if err:
         return err, status
 
-    users = User.query.all()
+    users = User.query.filter_by(is_admin=False).all()
     return jsonify([
         {"id": u.id, "username": u.username, "email": u.email, "is_active": u.is_active}
         for u in users
