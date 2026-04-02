@@ -11,4 +11,6 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
+    is_active = db.Column(db.Boolean, default=True)
+
     reviews = db.relationship("Review", backref="user", lazy=True)

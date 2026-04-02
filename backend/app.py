@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 from config import Config
 from models.movie_model import db
 from routes.movie_routes import movies_bp
@@ -14,6 +15,8 @@ from models.watchlist_model import Watchlist
 app = Flask(__name__)
 app.config.from_object(Config)
 CORS(app)
+
+bcrypt = Bcrypt(app)
 
 
 load_dotenv()

@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify, session
 from models.movie_model import db
 from models.user_model import User
-from flask_bcrypt import Bcrypt
 
 auth_bp = Blueprint("auth", __name__)
-bcrypt = Bcrypt()
+
+def get_bcrypt():
+    from app import bcrypt
+    return bcrypt
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
@@ -16,6 +18,7 @@ def register():
     if existing_user:
         return jsonify({"error": "Email already registered"}), 400
 
+    bcrypt = get_bcrypt()
     hashed_password = bcrypt.generate_password_hash(data["password"]).decode("utf-8")
     new_user = User(username=data["username"], email=data["email"], password=hashed_password)
 
@@ -34,10 +37,13 @@ def login():
         return jsonify({"error": "Email and password are required"}), 400
 
     user = User.query.filter_by(email=data["email"]).first()
+    bcrypt = get_bcrypt()
     if not user or not bcrypt.check_password_hash(user.password, data["password"]):
         return jsonify({"error": "Invalid email or password"}), 401
 
-    # Store user id in session for persistent login
+    if not user.is_active:
+        return jsonify({"error": "Account has been deactivated"}), 403
+
     session["user_id"] = user.id
 
     return jsonify({
