@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – CineApp</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">CineApp</a>
+    <div class="nav-links" id="navLinks"></div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-container">
+
+      <div class="auth-logo">CineApp</div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginSection">
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-subtitle">Sign in to your account</p>
+
+        <div class="auth-error" id="loginError"></div>
+
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••">
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="doLogin()">Sign In</button>
+
+        <p class="auth-toggle">
+          Don't have an account? <a onclick="showRegister()">Create one</a>
+        </p>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="registerSection" style="display:none">
+        <h2 class="auth-title">Create account</h2>
+        <p class="auth-subtitle">Join CineApp to track your watchlist</p>
+
+        <div class="auth-error" id="registerError"></div>
+
+        <div class="form-group">
+          <label for="regUsername">Username</label>
+          <input type="text" id="regUsername" placeholder="e.g. moviefan99">
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" placeholder="••••••••">
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="doRegister()">Create Account</button>
+
+        <p class="auth-toggle">
+          Already have an account? <a onclick="showLogin()">Sign in</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+
+</body>
+</html>
