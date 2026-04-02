@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel – CineApp</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">CineApp</a>
+    <div class="nav-links" id="navLinks"></div>
+  </nav>
+
+  <div class="admin-wrap">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <span class="sidebar-label">Admin Panel</span>
+      <a href="#" id="sidebarUsers" onclick="showSection('users')" class="active">User Management</a>
+      <a href="#" id="sidebarReviews" onclick="showSection('reviews')">Moderate Reviews</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="admin-main">
+
+      <!-- USER MANAGEMENT -->
+      <div id="sectionUsers">
+        <h1>User Management</h1>
+        <p class="admin-subtitle">View and manage user accounts. Deactivated users cannot log in.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MODERATE REVIEWS -->
+      <div id="sectionReviews" style="display:none">
+        <h1>Moderate Reviews</h1>
+        <p class="admin-subtitle">View and delete user reviews across the platform.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Movie ID</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="reviewsTableBody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>

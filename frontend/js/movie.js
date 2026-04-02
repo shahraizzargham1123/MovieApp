@@ -67,9 +67,7 @@ function renderMovieDetails(m) {
           <button class="btn ${inWatchlist ? 'btn-outline' : 'btn-primary'}" id="watchlistBtn" onclick="toggleWatchlist()">
             ${inWatchlist ? '✓ In Watchlist' : '+ Add to Watchlist'}
           </button>
-        ` : `
-          <a href="auth.html" class="btn btn-primary">Login to use Watchlist</a>
-        `}
+        ` : ''}
       </div>
     </div>
   `;
