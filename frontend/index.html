@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineApp – Discover Movies</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">CineApp</a>
+    <div class="nav-search">
+      <input type="text" id="searchInput" placeholder="Search movies...">
+      <button onclick="doSearch()">Search</button>
+    </div>
+    <div class="nav-links" id="navLinks"></div>
+  </nav>
+
+  <main>
+    <h2 class="section-title">Trending <span>Movies</span></h2>
+    <div class="movie-grid" id="movieGrid">
+      <p class="loading">Loading movies...</p>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </main>
+
+  <script src="js/utils.js"></script>
+  <script>
+    async function loadMovies(page) {
+      const grid = document.getElementById('movieGrid');
+      grid.innerHTML = '<p class="loading">Loading movies...</p>';
+      try {
+        const res  = await fetch(`${API}/movies/popular?page=${page}`, { credentials: 'include' });
+        const data = await res.json();
+        const movies = data.results || [];
+        if (!movies.length) {
+          grid.innerHTML = '<div class="empty-state"><h3>No movies found</h3></div>';
+          return;
+        }
+        grid.innerHTML = movies.map(movieCard).join('');
+        buildPagination(Math.min(data.total_pages || 1, 10), page);
+      } catch {
+        grid.innerHTML = '<p class="loading">Could not connect to the server. Make sure the backend is running.</p>';
+      }
+    }
+
+    function buildPagination(total, current) {
+      const pg = document.getElementById('pagination');
+      pg.innerHTML = '';
+      const btn = (label, page, active) => {
+        const b = document.createElement('button');
+        b.textContent = label;
+        if (active) b.classList.add('active');
+        b.onclick = () => loadMovies(page);
+        pg.appendChild(b);
+      };
+      if (current > 1) btn('Prev', current - 1, false);
+      for (let i = Math.max(1, current - 2); i <= Math.min(total, current + 2); i++) {
+        btn(i, i, i === current);
+      }
+      if (current < total) btn('Next', current + 1, false);
+    }
+
+    renderNav('home');
+    setupSearchInput();
+    loadMovies(1);
+  </script>
+
+</body>
+</html>

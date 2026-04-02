@@ -14,7 +14,10 @@ from models.watchlist_model import Watchlist
 
 app = Flask(__name__)
 app.config.from_object(Config)
-CORS(app)
+CORS(app, supports_credentials=True, origins=[
+    "http://127.0.0.1:5500",
+    "http://localhost:5500"
+])
 
 bcrypt = Bcrypt(app)
 
