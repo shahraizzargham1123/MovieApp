@@ -1,12 +1,12 @@
 const API = 'http://127.0.0.1:5000';
 
-/* ---------- User state (stored in localStorage after login) ---------- */
+/*  User state (stored in localStorage after login) */
 function getUser() {
   try { return JSON.parse(localStorage.getItem('movieapp_user') || 'null'); }
   catch { return null; }
 }
 
-/* ---------- Render nav links based on login state ---------- */
+/* Render nav links based on login state  */
 function renderNav(active) {
   const nav = document.getElementById('navLinks');
   if (!nav) return;
@@ -27,7 +27,7 @@ function renderNav(active) {
   }
 }
 
-/* ---------- Logout ---------- */
+/*  Logout  */
 async function logout() {
   try { await fetch(`${API}/auth/logout`, { method: 'POST', credentials: 'include' }); }
   catch {}
@@ -35,7 +35,7 @@ async function logout() {
   window.location.href = 'index.html';
 }
 
-/* ---------- Toast notification ---------- */
+/*  Toast notification  */
 function toast(msg, type) {
   document.querySelector('.toast')?.remove();
   const el = document.createElement('div');
@@ -45,7 +45,7 @@ function toast(msg, type) {
   setTimeout(() => el.remove(), 3500);
 }
 
-/* ---------- Search ---------- */
+/* Search  */
 function doSearch() {
   const q = document.getElementById('searchInput')?.value.trim();
   if (q) window.location.href = `search.html?q=${encodeURIComponent(q)}`;
@@ -57,7 +57,7 @@ function setupSearchInput() {
   });
 }
 
-/* ---------- Movie card HTML ---------- */
+/*  Movie card HTML  */
 function movieCard(m) {
   const poster = m.poster_path
     ? `<img src="https://image.tmdb.org/t/p/w300${m.poster_path}" alt="${m.title}" loading="lazy">`
