@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watchlist – CineApp</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">CineApp</a>
+    <div class="nav-search">
+      <input type="text" id="searchInput" placeholder="Search movies...">
+      <button onclick="doSearch()">Search</button>
+    </div>
+    <div class="nav-links" id="navLinks"></div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <h1>My Watchlist</h1>
+      <p>Movies you want to watch</p>
+    </div>
+
+    <div class="movie-grid" id="watchlistGrid">
+      <p class="loading">Loading watchlist...</p>
+    </div>
+  </main>
+
+  <script src="js/utils.js"></script>
+  <script>
+    const user = getUser();
+    if (!user) window.location.href = 'auth.html';
+
+    renderNav('watchlist');
+    setupSearchInput();
+
+    async function loadWatchlist() {
+      const grid = document.getElementById('watchlistGrid');
+      try {
+        const res   = await fetch(`${API}/watchlist/`, { credentials: 'include' });
+        const items = await res.json();
+
+        if (!items.length) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <h3>Your watchlist is empty</h3>
+              <p>Browse movies and click "Add to Watchlist" to save them here</p>
+              <a href="index.html" class="btn btn-primary" style="margin-top:16px">Browse Movies</a>
+            </div>`;
+          return;
+        }
+
+        grid.innerHTML = items.map(item => `
+          <div class="movie-card">
+            ${item.poster_path
+              ? `<img src="https://image.tmdb.org/t/p/w300${item.poster_path}" alt="${item.title}" loading="lazy" onclick="window.location.href='movie.html?id=${item.tmdb_id}'" style="cursor:pointer">`
+              : `<div class="movie-card-no-poster" onclick="window.location.href='movie.html?id=${item.tmdb_id}'" style="cursor:pointer">No Poster</div>`}
+            <div class="movie-card-info">
+              <div class="movie-card-title" title="${item.title}">${item.title}</div>
+              <div style="margin-top:8px">
+                <button class="btn btn-danger btn-sm" onclick="removeFromWatchlist(${item.tmdb_id}, this)">Remove</button>
+              </div>
+            </div>
+          </div>`).join('');
+
+      } catch {
+        grid.innerHTML = '<p class="loading">Could not load watchlist. Make sure the backend is running.</p>';
+      }
+    }
+
+    async function removeFromWatchlist(tmdbId, btn) {
+      btn.disabled = true;
+      btn.textContent = '...';
+      const res = await fetch(`${API}/watchlist/remove/${tmdbId}`, { method: 'DELETE', credentials: 'include' });
+      if (res.ok) { toast('Removed from watchlist'); loadWatchlist(); }
+      else        { toast('Could not remove.', 'error'); btn.disabled = false; btn.textContent = 'Remove'; }
+    }
+
+    loadWatchlist();
+  </script>
+
+</body>
+</html>

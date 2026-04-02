@@ -388,7 +388,7 @@ main {
 .auth-toggle a { color: var(--accent); cursor: pointer; }
 
 /* ---- MOVIE DETAILS PAGE ---- */
-.movie-hero {
+.movie-details-top {
   display: grid;
   grid-template-columns: 260px 1fr;
   gap: 40px;
@@ -641,7 +641,7 @@ table tbody tr:hover td { background: rgba(255,255,255,0.02); }
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 900px) {
-  .movie-hero { grid-template-columns: 1fr; }
+  .movie-details-top { grid-template-columns: 1fr; }
   .movie-poster { max-width: 200px; margin: 0 auto; }
 }
 

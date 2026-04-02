@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie – CineApp</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">CineApp</a>
+    <div class="nav-search">
+      <input type="text" id="searchInput" placeholder="Search movies...">
+      <button onclick="doSearch()">Search</button>
+    </div>
+    <div class="nav-links" id="navLinks"></div>
+  </nav>
+
+  <main>
+    <!-- MOVIE DETAILS -->
+    <div class="movie-details-top" id="movieDetails">
+      <p class="loading" style="grid-column:1/-1">Loading movie...</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- REVIEWS -->
+    <div id="reviewsSection">
+      <div class="reviews-header">
+        <h2>Reviews</h2>
+      </div>
+
+      <!-- Write a review (only shown when logged in and hasn't reviewed yet) -->
+      <div class="review-form-box" id="reviewFormBox" style="display:none">
+        <h3>Write a Review</h3>
+        <div class="rating-row">
+          <label>Rating</label>
+          <input type="number" id="reviewRating" min="1" max="10" placeholder="1–10">
+          <span style="color:var(--text-muted);font-size:0.82rem">out of 10</span>
+        </div>
+        <div class="form-group">
+          <textarea id="reviewComment" placeholder="Share your thoughts about this movie..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="submitReview()">Post Review</button>
+      </div>
+
+      <div id="reviewsList"></div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- MORE LIKE THIS -->
+    <div id="recommendationsSection">
+      <h2 class="section-title">More Like <span>This</span></h2>
+      <div class="horizontal-scroll" id="recommendationsList">
+        <p class="loading">Loading recommendations...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/utils.js"></script>
+  <script src="js/movie.js"></script>
+
+</body>
+</html>
