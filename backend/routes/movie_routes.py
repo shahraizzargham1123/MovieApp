@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request
 from services import tmdb_service
 from models.review_model import Review
+from models.movie_model import Movie
+from models.user_model import User
 
 movies_bp = Blueprint("movies", __name__)
 
@@ -31,14 +33,22 @@ def movie_recommendations(movie_id):
 
 @movies_bp.route("/<int:movie_id>/reviews")
 def movie_reviews(movie_id):
-    reviews = Review.query.filter_by(movie_id=movie_id).order_by(Review.created_at.desc()).all()
-    return jsonify([
-        {
+    movie = Movie.query.filter_by(tmdb_id=movie_id).first()
+    if not movie:
+        return jsonify([])
+    reviews = Review.query.filter_by(movie_id=movie.id).order_by(Review.created_at.desc()).all()
+    user_cache = {}
+    result = []
+    for r in reviews:
+        if r.user_id not in user_cache:
+            u = User.query.get(r.user_id)
+            user_cache[r.user_id] = u.username if u else "Unknown"
+        result.append({
             "id": r.id,
             "user_id": r.user_id,
+            "username": user_cache[r.user_id],
             "rating": r.rating,
             "comment": r.comment,
             "created_at": r.created_at.isoformat()
-        }
-        for r in reviews
-    ])
+        })
+    return jsonify(result)

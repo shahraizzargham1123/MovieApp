@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request, session
-from models.movie_model import db
+from models.movie_model import db, Movie
 from models.user_model import User
 from models.review_model import Review
+from services import tmdb_service
 
 user_bp = Blueprint("user", __name__)
 
@@ -27,16 +28,32 @@ def create_review():
         return jsonify({"error": "movie_id is required"}), 400
 
     rating = data.get("rating")
-    if rating is not None and not (1 <= int(rating) <= 10):
-        return jsonify({"error": "Rating must be between 1 and 10"}), 400
+    if rating is not None and not (1 <= int(rating) <= 5):
+        return jsonify({"error": "Rating must be between 1 and 5"}), 400
 
-    existing = Review.query.filter_by(user_id=user_id, movie_id=data["movie_id"]).first()
+    tmdb_id = int(data["movie_id"])
+
+    # Find or create the movie record so the FK is satisfied
+    movie = Movie.query.filter_by(tmdb_id=tmdb_id).first()
+    if not movie:
+        details = tmdb_service.get_movie_details(tmdb_id)
+        movie = Movie(
+            tmdb_id=tmdb_id,
+            title=details.get("title", ""),
+            overview=details.get("overview"),
+            release_date=details.get("release_date"),
+            poster_path=details.get("poster_path")
+        )
+        db.session.add(movie)
+        db.session.flush()
+
+    existing = Review.query.filter_by(user_id=user_id, movie_id=movie.id).first()
     if existing:
         return jsonify({"error": "You already reviewed this movie"}), 409
 
     review = Review(
         user_id=user_id,
-        movie_id=data["movie_id"],
+        movie_id=movie.id,
         rating=rating,
         comment=data.get("comment")
     )
@@ -57,8 +74,8 @@ def update_review(review_id):
 
     data = request.json
     if "rating" in data and data["rating"] is not None:
-        if not (1 <= int(data["rating"]) <= 10):
-            return jsonify({"error": "Rating must be between 1 and 10"}), 400
+        if not (1 <= int(data["rating"]) <= 5):
+            return jsonify({"error": "Rating must be between 1 and 5"}), 400
         review.rating = data["rating"]
     if "comment" in data:
         review.comment = data["comment"]

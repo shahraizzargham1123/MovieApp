@@ -4,11 +4,29 @@ const movieId = params.get('id');
 let currentMovie   = null;
 let userReviewId   = null;
 let watchlistIds   = [];
+let selectedRating = 0;
 
 if (!movieId) window.location.href = 'index.html';
 
 renderNav('');
 setupSearchInput();
+
+function setupStarPicker(currentVal = 0) {
+  selectedRating = currentVal;
+  const stars = document.querySelectorAll('#starPicker span');
+  function highlight(val) {
+    stars.forEach(s => s.classList.toggle('active', Number(s.dataset.val) <= val));
+  }
+  highlight(currentVal);
+  stars.forEach(s => {
+    s.addEventListener('mouseenter', () => highlight(Number(s.dataset.val)));
+    s.addEventListener('mouseleave', () => highlight(selectedRating));
+    s.addEventListener('click', () => {
+      selectedRating = Number(s.dataset.val);
+      highlight(selectedRating);
+    });
+  });
+}
 
 // ── Load everything in parallel ──────────────────────────────────────────────
 async function init() {
@@ -143,8 +161,8 @@ function renderReviews(reviews) {
         <div class="review-card">
           <div class="review-card-top">
             <div>
-              <span class="review-user">User #${r.user_id}</span>
-              ${r.rating ? `<span class="review-score" style="margin-left:10px">&#9733; ${r.rating}/10</span>` : ''}
+              <span class="review-user">${r.username || 'User #' + r.user_id}</span>
+              ${r.rating ? `<span class="review-score" style="margin-left:10px">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>` : ''}
             </div>
             <span class="review-date">${new Date(r.created_at).toLocaleDateString()}</span>
           </div>
@@ -160,15 +178,18 @@ function renderReviews(reviews) {
 
   // Show form only if logged in and hasn't reviewed yet
   const alreadyReviewed = user && reviews.some(r => r.user_id === user.id);
-  if (user && !alreadyReviewed) box.style.display = 'block';
-  else box.style.display = 'none';
+  if (user && !alreadyReviewed) {
+    box.style.display = 'block';
+    setupStarPicker(0);
+  } else {
+    box.style.display = 'none';
+  }
 }
 
 async function submitReview() {
-  const rating  = document.getElementById('reviewRating').value;
   const comment = document.getElementById('reviewComment').value.trim();
 
-  if (!rating && !comment) {
+  if (!selectedRating && !comment) {
     toast('Please add a rating or comment.', 'error'); return;
   }
 
@@ -176,7 +197,7 @@ async function submitReview() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ movie_id: Number(movieId), rating: rating ? Number(rating) : null, comment })
+    body: JSON.stringify({ movie_id: Number(movieId), rating: selectedRating || null, comment })
   });
 
   if (res.ok) {
@@ -190,23 +211,22 @@ async function submitReview() {
 
 function editReview(id, rating, comment) {
   document.getElementById('reviewFormBox').style.display = 'block';
-  document.getElementById('reviewRating').value  = rating || '';
   document.getElementById('reviewComment').value = comment || '';
   document.querySelector('#reviewFormBox h3').textContent = 'Edit Your Review';
   document.querySelector('#reviewFormBox .btn').onclick = () => updateReview(id);
   document.querySelector('#reviewFormBox .btn').textContent = 'Update Review';
+  setupStarPicker(rating || 0);
   document.getElementById('reviewFormBox').scrollIntoView({ behavior: 'smooth' });
 }
 
 async function updateReview(id) {
-  const rating  = document.getElementById('reviewRating').value;
   const comment = document.getElementById('reviewComment').value.trim();
 
   const res = await fetch(`${API}/user/reviews/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ rating: rating ? Number(rating) : null, comment })
+    body: JSON.stringify({ rating: selectedRating || null, comment })
   });
 
   if (res.ok) { toast('Review updated!', 'success'); fetchReviews(); }

@@ -108,6 +108,19 @@ function setupSearchInput() {
   document.getElementById('searchInput')?.addEventListener('keydown', e => {
     if (e.key === 'Enter') doSearch();
   });
+  document.getElementById('mobileSearchInput')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') doMobileSearch();
+  });
+}
+
+function toggleMobileSearch() {
+  document.getElementById('mobileSearchBar')?.classList.toggle('open');
+  document.getElementById('mobileSearchInput')?.focus();
+}
+
+function doMobileSearch() {
+  const q = document.getElementById('mobileSearchInput')?.value.trim();
+  if (q) window.location.href = `search.html?q=${encodeURIComponent(q)}`;
 }
 
 /*  Movie card HTML  */
