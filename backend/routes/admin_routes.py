@@ -20,11 +20,15 @@ def get_all_users():
     """
     Get all non-admin users
     ---
-    tags: [Admin]
+    tags:
+      - Admin
     responses:
-      200: {description: List of users}
-      401: {description: Not logged in}
-      403: {description: Admin access required}
+      200:
+        description: List of users
+      401:
+        description: Not logged in
+      403:
+        description: Admin access required
     """
     _, err, status = admin_required()
     if err:
@@ -42,17 +46,23 @@ def deactivate_user(user_id):
     """
     Deactivate a user account
     ---
-    tags: [Admin]
+    tags:
+      - Admin
     parameters:
       - name: user_id
         in: path
         required: true
-        schema: {type: integer}
+        type: integer
+        example: 1
     responses:
-      200: {description: User deactivated}
-      401: {description: Not logged in}
-      403: {description: Admin access required}
-      404: {description: User not found}
+      200:
+        description: User deactivated
+      401:
+        description: Not logged in
+      403:
+        description: Admin access required
+      404:
+        description: User not found
     """
     _, err, status = admin_required()
     if err:
@@ -72,17 +82,23 @@ def activate_user(user_id):
     """
     Activate a user account
     ---
-    tags: [Admin]
+    tags:
+      - Admin
     parameters:
       - name: user_id
         in: path
         required: true
-        schema: {type: integer}
+        type: integer
+        example: 1
     responses:
-      200: {description: User activated}
-      401: {description: Not logged in}
-      403: {description: Admin access required}
-      404: {description: User not found}
+      200:
+        description: User activated
+      401:
+        description: Not logged in
+      403:
+        description: Admin access required
+      404:
+        description: User not found
     """
     _, err, status = admin_required()
     if err:
@@ -102,11 +118,15 @@ def get_all_reviews():
     """
     Get all reviews (admin only)
     ---
-    tags: [Admin]
+    tags:
+      - Admin
     responses:
-      200: {description: List of all reviews}
-      401: {description: Not logged in}
-      403: {description: Admin access required}
+      200:
+        description: List of all reviews
+      401:
+        description: Not logged in
+      403:
+        description: Admin access required
     """
     _, err, status = admin_required()
     if err:
@@ -131,17 +151,23 @@ def delete_review(review_id):
     """
     Delete a review (admin only)
     ---
-    tags: [Admin]
+    tags:
+      - Admin
     parameters:
       - name: review_id
         in: path
         required: true
-        schema: {type: integer}
+        type: integer
+        example: 1
     responses:
-      200: {description: Review deleted}
-      401: {description: Not logged in}
-      403: {description: Admin access required}
-      404: {description: Review not found}
+      200:
+        description: Review deleted
+      401:
+        description: Not logged in
+      403:
+        description: Admin access required
+      404:
+        description: Review not found
     """
     _, err, status = admin_required()
     if err:

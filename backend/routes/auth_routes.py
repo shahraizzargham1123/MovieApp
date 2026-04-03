@@ -13,21 +13,30 @@ def register():
     """
     Register a new user
     ---
-    tags: [Auth]
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [username, email, password]
-            properties:
-              username: {type: string}
-              email:    {type: string}
-              password: {type: string}
+    tags:
+      - Auth
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [username, email, password]
+          properties:
+            username:
+              type: string
+              example: johndoe
+            email:
+              type: string
+              example: john@example.com
+            password:
+              type: string
+              example: secret123
     responses:
-      200: {description: User registered successfully}
-      400: {description: Missing fields or email already registered}
+      200:
+        description: User registered successfully
+      400:
+        description: Missing fields or email already registered
     """
     data = request.json
     if not data.get("username") or not data.get("email") or not data.get("password"):
@@ -54,21 +63,29 @@ def login():
     """
     Login a user
     ---
-    tags: [Auth]
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [email, password]
-            properties:
-              email:    {type: string}
-              password: {type: string}
+    tags:
+      - Auth
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [email, password]
+          properties:
+            email:
+              type: string
+              example: john@example.com
+            password:
+              type: string
+              example: secret123
     responses:
-      200: {description: Login successful}
-      401: {description: Invalid credentials}
-      403: {description: Account deactivated}
+      200:
+        description: Login successful
+      401:
+        description: Invalid credentials
+      403:
+        description: Account deactivated
     """
     data = request.json
     if not data.get("email") or not data.get("password"):
@@ -94,9 +111,11 @@ def logout():
     """
     Logout the current user
     ---
-    tags: [Auth]
+    tags:
+      - Auth
     responses:
-      200: {description: Logged out successfully}
+      200:
+        description: Logged out successfully
     """
     session.pop("user_id", None)
     return jsonify({"message": "Logged out successfully"})

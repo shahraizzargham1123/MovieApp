@@ -11,13 +11,16 @@ def popular_movies():
     """
     Get popular movies
     ---
-    tags: [Movies]
+    tags:
+      - Movies
     parameters:
       - name: page
         in: query
-        schema: {type: integer, default: 1}
+        type: integer
+        default: 1
     responses:
-      200: {description: List of popular movies from TMDB}
+      200:
+        description: List of popular movies from TMDB
     """
     page = request.args.get("page", 1, type=int)
     data = tmdb_service.get_popular_movies(page)
@@ -28,15 +31,19 @@ def search_movies():
     """
     Search movies by title
     ---
-    tags: [Movies]
+    tags:
+      - Movies
     parameters:
       - name: q
         in: query
+        type: string
         required: true
-        schema: {type: string}
+        example: Inception
     responses:
-      200: {description: Search results from TMDB}
-      400: {description: Missing query parameter}
+      200:
+        description: Search results from TMDB
+      400:
+        description: Missing query parameter
     """
     query = request.args.get("q")
     if not query:
@@ -49,14 +56,17 @@ def movie_details(movie_id):
     """
     Get movie details by TMDB ID
     ---
-    tags: [Movies]
+    tags:
+      - Movies
     parameters:
       - name: movie_id
         in: path
         required: true
-        schema: {type: integer}
+        type: integer
+        example: 550
     responses:
-      200: {description: Movie details from TMDB}
+      200:
+        description: Movie details from TMDB
     """
     data = tmdb_service.get_movie_details(movie_id)
     return jsonify(data)
@@ -66,14 +76,17 @@ def movie_recommendations(movie_id):
     """
     Get movie recommendations by TMDB ID
     ---
-    tags: [Movies]
+    tags:
+      - Movies
     parameters:
       - name: movie_id
         in: path
         required: true
-        schema: {type: integer}
+        type: integer
+        example: 550
     responses:
-      200: {description: Recommended movies from TMDB}
+      200:
+        description: Recommended movies from TMDB
     """
     data = tmdb_service.get_movie_recommendations(movie_id)
     return jsonify(data)
@@ -84,14 +97,17 @@ def movie_reviews(movie_id):
     """
     Get all reviews for a movie
     ---
-    tags: [Movies]
+    tags:
+      - Movies
     parameters:
       - name: movie_id
         in: path
         required: true
-        schema: {type: integer}
+        type: integer
+        example: 550
     responses:
-      200: {description: List of reviews for the movie}
+      200:
+        description: List of reviews for the movie
     """
     movie = Movie.query.filter_by(tmdb_id=movie_id).first()
     if not movie:

@@ -12,10 +12,13 @@ def get_my_profile():
     """
     Get current user profile
     ---
-    tags: [User]
+    tags:
+      - User
     responses:
-      200: {description: Current user details}
-      401: {description: Not logged in}
+      200:
+        description: Current user details
+      401:
+        description: Not logged in
     """
     user_id = session.get("user_id")
     if not user_id:
@@ -30,23 +33,36 @@ def create_review():
     """
     Submit a review for a movie
     ---
-    tags: [User]
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [movie_id]
-            properties:
-              movie_id: {type: integer}
-              rating:   {type: integer, minimum: 1, maximum: 5}
-              comment:  {type: string}
+    tags:
+      - User
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [movie_id]
+          properties:
+            movie_id:
+              type: integer
+              example: 550
+            rating:
+              type: integer
+              minimum: 1
+              maximum: 5
+              example: 4
+            comment:
+              type: string
+              example: Great movie!
     responses:
-      201: {description: Review created}
-      400: {description: Invalid input}
-      401: {description: Not logged in}
-      409: {description: Already reviewed}
+      201:
+        description: Review created
+      400:
+        description: Invalid input
+      401:
+        description: Not logged in
+      409:
+        description: Already reviewed this movie
     """
     user_id = session.get("user_id")
     if not user_id:
@@ -62,7 +78,6 @@ def create_review():
 
     tmdb_id = int(data["movie_id"])
 
-    # Find or create the movie record so the FK is satisfied
     movie = Movie.query.filter_by(tmdb_id=tmdb_id).first()
     if not movie:
         details = tmdb_service.get_movie_details(tmdb_id)
@@ -96,24 +111,33 @@ def update_review(review_id):
     """
     Update a review
     ---
-    tags: [User]
+    tags:
+      - User
     parameters:
       - name: review_id
         in: path
         required: true
-        schema: {type: integer}
-    requestBody:
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              rating:  {type: integer, minimum: 1, maximum: 5}
-              comment: {type: string}
+        type: integer
+      - in: body
+        name: body
+        schema:
+          type: object
+          properties:
+            rating:
+              type: integer
+              minimum: 1
+              maximum: 5
+              example: 5
+            comment:
+              type: string
+              example: Updated thoughts
     responses:
-      200: {description: Review updated}
-      401: {description: Not logged in}
-      404: {description: Review not found}
+      200:
+        description: Review updated
+      401:
+        description: Not logged in
+      404:
+        description: Review not found
     """
     user_id = session.get("user_id")
     if not user_id:
@@ -140,16 +164,20 @@ def delete_review(review_id):
     """
     Delete a review
     ---
-    tags: [User]
+    tags:
+      - User
     parameters:
       - name: review_id
         in: path
         required: true
-        schema: {type: integer}
+        type: integer
     responses:
-      200: {description: Review deleted}
-      401: {description: Not logged in}
-      404: {description: Review not found}
+      200:
+        description: Review deleted
+      401:
+        description: Not logged in
+      404:
+        description: Review not found
     """
     user_id = session.get("user_id")
     if not user_id:

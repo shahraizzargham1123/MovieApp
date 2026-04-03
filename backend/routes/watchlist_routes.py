@@ -10,10 +10,13 @@ def get_watchlist():
     """
     Get current user's watchlist
     ---
-    tags: [Watchlist]
+    tags:
+      - Watchlist
     responses:
-      200: {description: List of watchlist items}
-      401: {description: Not logged in}
+      200:
+        description: List of watchlist items
+      401:
+        description: Not logged in
     """
     user_id = session.get("user_id")
     if not user_id:
@@ -37,23 +40,34 @@ def add_to_watchlist():
     """
     Add a movie to the watchlist
     ---
-    tags: [Watchlist]
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [tmdb_id, title]
-            properties:
-              tmdb_id:     {type: integer}
-              title:       {type: string}
-              poster_path: {type: string}
+    tags:
+      - Watchlist
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [tmdb_id, title]
+          properties:
+            tmdb_id:
+              type: integer
+              example: 550
+            title:
+              type: string
+              example: Fight Club
+            poster_path:
+              type: string
+              example: /pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg
     responses:
-      201: {description: Added to watchlist}
-      400: {description: Missing required fields}
-      401: {description: Not logged in}
-      409: {description: Movie already in watchlist}
+      201:
+        description: Added to watchlist
+      400:
+        description: Missing required fields
+      401:
+        description: Not logged in
+      409:
+        description: Movie already in watchlist
     """
     user_id = session.get("user_id")
     if not user_id:
@@ -84,16 +98,21 @@ def remove_from_watchlist(tmdb_id):
     """
     Remove a movie from the watchlist
     ---
-    tags: [Watchlist]
+    tags:
+      - Watchlist
     parameters:
       - name: tmdb_id
         in: path
         required: true
-        schema: {type: integer}
+        type: integer
+        example: 550
     responses:
-      200: {description: Removed from watchlist}
-      401: {description: Not logged in}
-      404: {description: Movie not in watchlist}
+      200:
+        description: Removed from watchlist
+      401:
+        description: Not logged in
+      404:
+        description: Movie not in watchlist
     """
     user_id = session.get("user_id")
     if not user_id:
