@@ -1,11 +1,12 @@
 # Movie Web Application
 
-A full-stack movie browsing web application built with Flask and Vanilla JavaScript, integrating the TMDB API for real-time movie data.
+A full-stack movie browsing web application built with Flask and Vanilla JavaScript, integrating the TMDB API for real time movie data.
 
 ## Team Members
 
 - **Shahraiz Zargham** – Backend Development & API Integration
 - **Michael Oladapo** – Frontend Development (Vanilla JavaScript UI/UX)
+- **Oluwaseun** – Frontend Development (Vanilla JavaScript UI/UX) and Report writing
 - **Joseph George** – Database Management & Security Implementation
 
 ## Features
