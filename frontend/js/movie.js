@@ -28,7 +28,7 @@ async function fetchMovie() {
     const res  = await fetch(`${API}/movies/${movieId}`, { credentials: 'include' });
     const data = await res.json();
     currentMovie = data;
-    document.title = `${data.title} – CineApp`;
+    document.title = `${data.title} – Cinestream`;
     renderMovieDetails(data);
   } catch {
     document.getElementById('movieDetails').innerHTML =

@@ -6,13 +6,13 @@ renderNav();
 function showLogin() {
   document.getElementById('loginSection').style.display = 'block';
   document.getElementById('registerSection').style.display = 'none';
-  document.title = 'Login – CineApp';
+  document.title = 'Login – Cinestream';
 }
 
 function showRegister() {
   document.getElementById('loginSection').style.display = 'none';
   document.getElementById('registerSection').style.display = 'block';
-  document.title = 'Register – CineApp';
+  document.title = 'Register – Cinestream';
 }
 
 function showError(id, msg) {
