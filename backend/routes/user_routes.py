@@ -9,6 +9,14 @@ user_bp = Blueprint("user", __name__)
 
 @user_bp.route("/me")
 def get_my_profile():
+    """
+    Get current user profile
+    ---
+    tags: [User]
+    responses:
+      200: {description: Current user details}
+      401: {description: Not logged in}
+    """
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401
@@ -19,6 +27,27 @@ def get_my_profile():
 
 @user_bp.route("/reviews", methods=["POST"])
 def create_review():
+    """
+    Submit a review for a movie
+    ---
+    tags: [User]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [movie_id]
+            properties:
+              movie_id: {type: integer}
+              rating:   {type: integer, minimum: 1, maximum: 5}
+              comment:  {type: string}
+    responses:
+      201: {description: Review created}
+      400: {description: Invalid input}
+      401: {description: Not logged in}
+      409: {description: Already reviewed}
+    """
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401
@@ -64,6 +93,28 @@ def create_review():
 
 @user_bp.route("/reviews/<int:review_id>", methods=["PUT"])
 def update_review(review_id):
+    """
+    Update a review
+    ---
+    tags: [User]
+    parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema: {type: integer}
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              rating:  {type: integer, minimum: 1, maximum: 5}
+              comment: {type: string}
+    responses:
+      200: {description: Review updated}
+      401: {description: Not logged in}
+      404: {description: Review not found}
+    """
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401
@@ -86,6 +137,20 @@ def update_review(review_id):
 
 @user_bp.route("/reviews/<int:review_id>", methods=["DELETE"])
 def delete_review(review_id):
+    """
+    Delete a review
+    ---
+    tags: [User]
+    parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema: {type: integer}
+    responses:
+      200: {description: Review deleted}
+      401: {description: Not logged in}
+      404: {description: Review not found}
+    """
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401

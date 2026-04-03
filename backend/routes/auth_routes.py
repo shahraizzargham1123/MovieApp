@@ -10,6 +10,25 @@ def get_bcrypt():
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
+    """
+    Register a new user
+    ---
+    tags: [Auth]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [username, email, password]
+            properties:
+              username: {type: string}
+              email:    {type: string}
+              password: {type: string}
+    responses:
+      200: {description: User registered successfully}
+      400: {description: Missing fields or email already registered}
+    """
     data = request.json
     if not data.get("username") or not data.get("email") or not data.get("password"):
         return jsonify({"error": "Missing required fields"}), 400
@@ -32,6 +51,25 @@ def register():
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
+    """
+    Login a user
+    ---
+    tags: [Auth]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [email, password]
+            properties:
+              email:    {type: string}
+              password: {type: string}
+    responses:
+      200: {description: Login successful}
+      401: {description: Invalid credentials}
+      403: {description: Account deactivated}
+    """
     data = request.json
     if not data.get("email") or not data.get("password"):
         return jsonify({"error": "Email and password are required"}), 400
@@ -53,5 +91,12 @@ def login():
 
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
+    """
+    Logout the current user
+    ---
+    tags: [Auth]
+    responses:
+      200: {description: Logged out successfully}
+    """
     session.pop("user_id", None)
     return jsonify({"message": "Logged out successfully"})

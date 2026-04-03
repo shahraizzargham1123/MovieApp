@@ -7,6 +7,14 @@ watchlist_bp = Blueprint("watchlist", __name__)
 
 @watchlist_bp.route("/", methods=["GET"])
 def get_watchlist():
+    """
+    Get current user's watchlist
+    ---
+    tags: [Watchlist]
+    responses:
+      200: {description: List of watchlist items}
+      401: {description: Not logged in}
+    """
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401
@@ -26,6 +34,27 @@ def get_watchlist():
 
 @watchlist_bp.route("/add", methods=["POST"])
 def add_to_watchlist():
+    """
+    Add a movie to the watchlist
+    ---
+    tags: [Watchlist]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [tmdb_id, title]
+            properties:
+              tmdb_id:     {type: integer}
+              title:       {type: string}
+              poster_path: {type: string}
+    responses:
+      201: {description: Added to watchlist}
+      400: {description: Missing required fields}
+      401: {description: Not logged in}
+      409: {description: Movie already in watchlist}
+    """
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401
@@ -52,6 +81,20 @@ def add_to_watchlist():
 
 @watchlist_bp.route("/remove/<int:tmdb_id>", methods=["DELETE"])
 def remove_from_watchlist(tmdb_id):
+    """
+    Remove a movie from the watchlist
+    ---
+    tags: [Watchlist]
+    parameters:
+      - name: tmdb_id
+        in: path
+        required: true
+        schema: {type: integer}
+    responses:
+      200: {description: Removed from watchlist}
+      401: {description: Not logged in}
+      404: {description: Movie not in watchlist}
+    """
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401

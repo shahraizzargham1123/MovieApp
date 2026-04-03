@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+from flasgger import Swagger
 from config import Config
 from models.movie_model import db
 from routes.movie_routes import movies_bp
@@ -19,6 +20,14 @@ CORS(app, supports_credentials=True, origins=[
     "http://localhost:5500"
 ])
 
+app.config["SWAGGER"] = {
+    "title": "Cinestream API",
+    "uiversion": 3,
+    "version": "1.0.0",
+    "description": "REST API for the Cinestream movie web application"
+}
+Swagger(app)
+
 bcrypt = Bcrypt(app)
 
 
@@ -29,7 +38,11 @@ db_password = os.getenv("DB_PASSWORD")
 db_host = os.getenv("DB_HOST")
 db_name = os.getenv("DB_NAME")
 
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}"
+test_uri = os.getenv("DATABASE_URL_OVERRIDE")
+if test_uri:
+    app.config["SQLALCHEMY_DATABASE_URI"] = test_uri
+elif not app.config.get("SQLALCHEMY_DATABASE_URI"):
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}"
 
 db.init_app(app)
 

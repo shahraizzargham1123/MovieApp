@@ -8,12 +8,36 @@ movies_bp = Blueprint("movies", __name__)
 
 @movies_bp.route("/popular")
 def popular_movies():
+    """
+    Get popular movies
+    ---
+    tags: [Movies]
+    parameters:
+      - name: page
+        in: query
+        schema: {type: integer, default: 1}
+    responses:
+      200: {description: List of popular movies from TMDB}
+    """
     page = request.args.get("page", 1, type=int)
     data = tmdb_service.get_popular_movies(page)
     return jsonify(data)
 
 @movies_bp.route("/search")
 def search_movies():
+    """
+    Search movies by title
+    ---
+    tags: [Movies]
+    parameters:
+      - name: q
+        in: query
+        required: true
+        schema: {type: string}
+    responses:
+      200: {description: Search results from TMDB}
+      400: {description: Missing query parameter}
+    """
     query = request.args.get("q")
     if not query:
         return jsonify({"error": "Query parameter is required"}), 400
@@ -22,17 +46,53 @@ def search_movies():
 
 @movies_bp.route("/<int:movie_id>")
 def movie_details(movie_id):
+    """
+    Get movie details by TMDB ID
+    ---
+    tags: [Movies]
+    parameters:
+      - name: movie_id
+        in: path
+        required: true
+        schema: {type: integer}
+    responses:
+      200: {description: Movie details from TMDB}
+    """
     data = tmdb_service.get_movie_details(movie_id)
     return jsonify(data)
 
 @movies_bp.route("/<int:movie_id>/recommendations")
 def movie_recommendations(movie_id):
+    """
+    Get movie recommendations by TMDB ID
+    ---
+    tags: [Movies]
+    parameters:
+      - name: movie_id
+        in: path
+        required: true
+        schema: {type: integer}
+    responses:
+      200: {description: Recommended movies from TMDB}
+    """
     data = tmdb_service.get_movie_recommendations(movie_id)
     return jsonify(data)
 
 
 @movies_bp.route("/<int:movie_id>/reviews")
 def movie_reviews(movie_id):
+    """
+    Get all reviews for a movie
+    ---
+    tags: [Movies]
+    parameters:
+      - name: movie_id
+        in: path
+        required: true
+        schema: {type: integer}
+    responses:
+      200: {description: List of reviews for the movie}
+    """
     movie = Movie.query.filter_by(tmdb_id=movie_id).first()
     if not movie:
         return jsonify([])

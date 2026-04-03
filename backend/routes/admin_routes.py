@@ -17,6 +17,15 @@ def admin_required():
 
 @admin_bp.route("/users")
 def get_all_users():
+    """
+    Get all non-admin users
+    ---
+    tags: [Admin]
+    responses:
+      200: {description: List of users}
+      401: {description: Not logged in}
+      403: {description: Admin access required}
+    """
     _, err, status = admin_required()
     if err:
         return err, status
@@ -30,6 +39,21 @@ def get_all_users():
 
 @admin_bp.route("/users/<int:user_id>/deactivate", methods=["PUT"])
 def deactivate_user(user_id):
+    """
+    Deactivate a user account
+    ---
+    tags: [Admin]
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema: {type: integer}
+    responses:
+      200: {description: User deactivated}
+      401: {description: Not logged in}
+      403: {description: Admin access required}
+      404: {description: User not found}
+    """
     _, err, status = admin_required()
     if err:
         return err, status
@@ -45,6 +69,21 @@ def deactivate_user(user_id):
 
 @admin_bp.route("/users/<int:user_id>/activate", methods=["PUT"])
 def activate_user(user_id):
+    """
+    Activate a user account
+    ---
+    tags: [Admin]
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema: {type: integer}
+    responses:
+      200: {description: User activated}
+      401: {description: Not logged in}
+      403: {description: Admin access required}
+      404: {description: User not found}
+    """
     _, err, status = admin_required()
     if err:
         return err, status
@@ -60,6 +99,15 @@ def activate_user(user_id):
 
 @admin_bp.route("/reviews")
 def get_all_reviews():
+    """
+    Get all reviews (admin only)
+    ---
+    tags: [Admin]
+    responses:
+      200: {description: List of all reviews}
+      401: {description: Not logged in}
+      403: {description: Admin access required}
+    """
     _, err, status = admin_required()
     if err:
         return err, status
@@ -80,6 +128,21 @@ def get_all_reviews():
 
 @admin_bp.route("/reviews/<int:review_id>", methods=["DELETE"])
 def delete_review(review_id):
+    """
+    Delete a review (admin only)
+    ---
+    tags: [Admin]
+    parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema: {type: integer}
+    responses:
+      200: {description: Review deleted}
+      401: {description: Not logged in}
+      403: {description: Admin access required}
+      404: {description: Review not found}
+    """
     _, err, status = admin_required()
     if err:
         return err, status

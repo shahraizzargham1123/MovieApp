@@ -17,7 +17,7 @@ A full-stack movie browsing web application built with Flask and Vanilla JavaScr
 - View movie details (poster, description, genre, rating)
 - Similar movie recommendations ("More Like This")
 - Add/remove movies to a personal watchlist
-- Write, edit, and delete reviews with ratings (1–10)
+- Write, edit, and delete reviews with star ratings (1–5 stars)
 - User registration, login, and logout
 
 ### Admin Features
@@ -167,6 +167,20 @@ MovieApp/
 | PUT | `/admin/users/<id>/activate` | Reactivate a user |
 | GET | `/admin/reviews` | View all reviews |
 | DELETE | `/admin/reviews/<id>` | Delete a review |
+
+## API Documentation
+
+Swagger UI is available at `http://127.0.0.1:5000/apidocs` when the backend is running.
+
+## Running Tests
+
+```bash
+cd backend
+venv\Scripts\activate
+pytest tests/ -v
+```
+
+All 28 unit tests cover authentication, reviews, watchlist, and admin endpoints.
 
 ## Security
 
