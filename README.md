@@ -4,10 +4,10 @@ A full-stack movie browsing web application built with Flask and Vanilla JavaScr
 
 ## Team Members
 
-- **Shahraiz Zargham** – Backend Development & API Integration
-- **Michael Oladapo** – Frontend Development (Vanilla JavaScript UI/UX)
+- **Shahraiz Zargham** – Backend Development/API Integration and database management
+- **Michael Oladapo** – Frontend Development (Vanilla JavaScript UI/UX) and Report proof reading
 - **Oluwaseun** – Frontend Development (Vanilla JavaScript UI/UX) and Report writing
-- **Joseph George** – Database Management & Security Implementation
+- **Joseph George** – Frontend Development (Vanilla JavaScript UI/UX) and Report proof reading
 
 ## Features
 
