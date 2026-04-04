@@ -96,7 +96,7 @@ MovieApp/
 
 3. Install dependencies:
    ```bash
-   pip install flask flask-sqlalchemy flask-cors flask-bcrypt pymysql python-dotenv requests
+   pip install flask flask-sqlalchemy flask-cors flask-bcrypt pymysql python-dotenv requests flasgger
    ```
 
 4. Create a `.env` file inside `backend/`:
@@ -105,15 +105,19 @@ MovieApp/
    DB_PASSWORD=your_mysql_password
    DB_HOST=localhost
    DB_NAME=movie_app
-   SECRET_KEY=your_secret_key
+   SECRET_KEY=any_random_string
    TMDB_API_KEY=your_tmdb_api_key
    ```
+   Get a free TMDB API key at https://www.themoviedb.org/settings/api
 
-5. Create the database and tables:
+5. Create the database and tables in MySQL:
+   ```sql
+   CREATE DATABASE IF NOT EXISTS movie_app;
+   USE movie_app;
+   ```
+   Then run the full schema:
    ```bash
-   flask shell
-   >>> from models.movie_model import db
-   >>> db.create_all()
+   mysql -u your_mysql_username -p movie_app < database/schema.sql
    ```
 
 6. Set the first admin manually in MySQL:
@@ -123,8 +127,12 @@ MovieApp/
 
 7. Run the backend:
    ```bash
-   flask run
+   python app.py
    ```
+
+8. Open the frontend:
+   - Open `frontend/index.html` with a live server (e.g. VS Code Live Server extension) or any local HTTP server
+   - The backend must be running on `http://127.0.0.1:5000` for the frontend to connect
 
 ## API Endpoints
 
