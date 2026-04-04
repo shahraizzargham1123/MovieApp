@@ -29,7 +29,7 @@ def get_watchlist():
             "tmdb_id": item.tmdb_id,
             "title": item.title,
             "poster_path": item.poster_path,
-            "added_at": item.added_at.isoformat()
+            "added_at": item.added_at.isoformat() if item.added_at else None
         }
         for item in items
     ])
@@ -89,6 +89,7 @@ def add_to_watchlist():
     )
     db.session.add(item)
     db.session.commit()
+    db.session.refresh(item)
 
     return jsonify({"message": "Added to watchlist", "tmdb_id": item.tmdb_id}), 201
 
